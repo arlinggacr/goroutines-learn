@@ -28,3 +28,27 @@ func TestManyGoroutines(t *testing.T) {
 
 	time.Sleep(5 * time.Second)
 }
+
+func TestCreateChannel(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+	// send data
+	// channel <- "Hello, Channel!"
+
+	// make channel inside the variabel
+	// data := <-channel
+
+	// or just put it
+	// fmt.Println(<-channel)
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		channel <- "arlingga"
+		fmt.Println("Selesai test create channel") // depends the long of the data, if this longer than this can be go first than the channel
+	}()
+
+	data := <-channel
+	fmt.Println(data)
+
+	time.Sleep(5 * time.Second)
+}
