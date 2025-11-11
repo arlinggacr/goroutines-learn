@@ -52,3 +52,20 @@ func TestCreateChannel(t *testing.T) {
 
 	time.Sleep(5 * time.Second)
 }
+
+func ToResponse(channel chan string) {
+	time.Sleep(2 * time.Second)
+	channel <- "Arlingga Response"
+}
+
+func TestChannelWithParameter(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	go ToResponse(channel)
+
+	data := <-channel
+	fmt.Println(data)
+
+	time.Sleep(5 * time.Second)
+}
