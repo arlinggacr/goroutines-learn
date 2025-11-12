@@ -70,12 +70,12 @@ func TestChannelWithParameter(t *testing.T) {
 	time.Sleep(5 * time.Second)
 }
 
-func DataIn(channel chan<- string) {
+func DataIn(channel chan<- string) { // input data from parameter
 	time.Sleep(2 * time.Second)
 	channel <- "Data In Channel"
 }
 
-func DataOut(channel <-chan string) {
+func DataOut(channel <-chan string) { // only send data from channel
 	data := <-channel
 	fmt.Println(data)
 }
