@@ -69,3 +69,23 @@ func TestChannelWithParameter(t *testing.T) {
 
 	time.Sleep(5 * time.Second)
 }
+
+func DataIn(channel chan<- string) {
+	time.Sleep(2 * time.Second)
+	channel <- "Data In Channel"
+}
+
+func DataOut(channel <-chan string) {
+	data := <-channel
+	fmt.Println(data)
+}
+
+func TestChannelInAndOut(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	DataIn(channel)
+	DataOut(channel)
+
+	time.Sleep(3 * time.Second)
+}
