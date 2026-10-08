@@ -89,3 +89,22 @@ func TestChannelInAndOut(t *testing.T) {
 
 	time.Sleep(3 * time.Second)
 }
+
+// buffered channel
+func TestBufferedChannel(t *testing.T) { // get in the data buffer even the data wasnt read yet, but if the buffer is full, the data will be deadlock  until the data is read
+	channel := make(chan string, 2) // buffered channel with capacity of 2
+	defer close(channel)
+
+	go func() {
+		channel <- "Data 1"
+		channel <- "Data 2"
+	}()
+
+	go func() {
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+	}()
+
+	time.Sleep(2 * time.Second)
+	fmt.Println("Done Task")
+}
