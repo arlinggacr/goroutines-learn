@@ -2,6 +2,7 @@ package goroutines_learn
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -106,5 +107,25 @@ func TestBufferedChannel(t *testing.T) { // get in the data buffer even the data
 	}()
 
 	time.Sleep(2 * time.Second)
+	fmt.Println("Done Task")
+}
+
+// range channel
+// for iterating the data that is goes into channel, and the channel will be closed when the data is done
+func TestRangeChannel(t *testing.T) {
+	channel := make(chan string)
+
+	// anonymous function to send data to channel
+	go func() {
+		for i := 1; i <= 5; i++ {
+			channel <- "Loop in channel " + strconv.Itoa(i)
+		}
+		close(channel)
+	}()
+
+	for data := range channel {
+		fmt.Println("got data", data)
+	}
+
 	fmt.Println("Done Task")
 }
