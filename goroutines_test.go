@@ -129,3 +129,72 @@ func TestRangeChannel(t *testing.T) {
 
 	fmt.Println("Done Task")
 }
+
+// select channel
+// selecting the channel that is ready to be read or write, if the channel is not ready, it will be blocked until the channel is ready
+// if there are multiple channels that are ready, it will select one of them randomly
+func TestSelectChannel(t *testing.T) {
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+	defer close(channel1)
+	defer close(channel2)
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		channel1 <- "Data from channel 1"
+	}()
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		channel2 <- "Data from channel 2"
+	}()
+
+	counter := 0
+	for {
+		select {
+		case data := <-channel1:
+			fmt.Println(data)
+			counter++
+		case data := <-channel2:
+			fmt.Println(data)
+			counter++
+		}
+		if counter == 2 {
+			break
+		}
+	}
+}
+
+func TestDefaultSelectChannel(t *testing.T) {
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+	defer close(channel1)
+	defer close(channel2)
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		channel1 <- "Data from channel 1"
+	}()
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		channel2 <- "Data from channel 2"
+	}()
+
+	counter := 0
+	for {
+		select {
+		case data := <-channel1:
+			fmt.Println(data)
+			counter++
+		case data := <-channel2:
+			fmt.Println(data)
+			counter++
+		default:
+			fmt.Println("Menunggu data")
+		}
+		if counter == 2 {
+			break
+		}
+	}
+}
